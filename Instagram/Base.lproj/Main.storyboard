@@ -12,7 +12,7 @@
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="LoginViewController" customModule="Instagram" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="loginViewController" id="BYZ-38-t0r" customClass="LoginViewController" customModule="Instagram" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -64,7 +64,7 @@
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="137.18140929535232"/>
         </scene>
-        <!--Home View Controller-->
+        <!--Instagram-->
         <scene sceneID="MQG-0Q-uKc">
             <objects>
                 <viewController storyboardIdentifier="HomeViewController" id="5wW-ef-YYT" customClass="HomeViewController" customModule="Instagram" customModuleProvider="target" sceneMemberID="viewController">
@@ -112,6 +112,7 @@
                                             <outlet property="captionLabel" destination="NVH-bX-8yj" id="Cr1-qv-ZSQ"/>
                                             <outlet property="photoView" destination="O8b-76-k6M" id="D5h-lG-btL"/>
                                             <outlet property="userLabel" destination="ixY-iW-Wpd" id="rrg-GO-62D"/>
+                                            <segue destination="SFC-uv-Zav" kind="show" id="7Zi-4A-ONk"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -119,7 +120,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="mF5-Kf-xpM">
+                    <navigationItem key="navigationItem" title="Instagram" id="mF5-Kf-xpM">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="uOQ-z4-39x">
                             <connections>
                                 <action selector="onLogout:" destination="5wW-ef-YYT" id="A5z-gA-eNN"/>
@@ -133,6 +134,57 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="50R-j0-TbY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2647.1999999999998" y="136.28185907046478"/>
+        </scene>
+        <!--Details View Controller-->
+        <scene sceneID="J9N-Xs-Cmk">
+            <objects>
+                <viewController id="SFC-uv-Zav" customClass="DetailsViewController" customModule="Instagram" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Xgv-P7-GT6"/>
+                        <viewControllerLayoutGuide type="bottom" id="oSX-0d-bXd"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="4sz-Ej-gUh">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="User" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UdR-04-G38">
+                                <rect key="frame" x="16" y="95" width="225" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hMN-Rw-GY7" customClass="PFImageView">
+                                <rect key="frame" x="0.0" y="124" width="377" height="377"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Caption" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UtQ-zD-kml">
+                                <rect key="frame" x="16" y="511" width="343" height="55"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Timestamp" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EGh-zS-YSK">
+                                <rect key="frame" x="250" y="95" width="109" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="captionLabel" destination="UtQ-zD-kml" id="J9Q-kc-rPL"/>
+                        <outlet property="photoView" destination="hMN-Rw-GY7" id="ToS-B2-7VV"/>
+                        <outlet property="timestampLabel" destination="EGh-zS-YSK" id="QEM-VK-ti3"/>
+                        <outlet property="userLabel" destination="UdR-04-G38" id="d3m-GD-b1F"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5kN-yQ-AJf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3446" y="137"/>
         </scene>
         <!--Home-->
         <scene sceneID="bx8-cm-li0">
@@ -172,7 +224,7 @@
             </objects>
             <point key="canvasLocation" x="912.79999999999995" y="136.28185907046478"/>
         </scene>
-        <!--Create View Controller-->
+        <!--Upload a Post-->
         <scene sceneID="DH3-XP-dag">
             <objects>
                 <viewController id="NTX-aC-uWg" customClass="CreateViewController" customModule="Instagram" customModuleProvider="target" sceneMemberID="viewController">
@@ -198,7 +250,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="Q7F-5T-c2s">
+                    <navigationItem key="navigationItem" title="Upload a Post" id="Q7F-5T-c2s">
                         <barButtonItem key="rightBarButtonItem" title="Share" id="yzl-nN-EYp">
                             <connections>
                                 <action selector="onShare:" destination="NTX-aC-uWg" id="NoS-Wn-HcX"/>

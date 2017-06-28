@@ -63,16 +63,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @IBAction func onLogout(_ sender: Any) {
-        PFUser.logOutInBackground { (error: Error?) in
-            if let error = error {
-                print(error.localizedDescription)
-            } else {
-                self.dismiss(animated: true, completion: nil)
-                self.dismiss(animated: true, completion: nil)
-                print("Logout successful")
-                //Logout doesn't return you to login screen
-            }
-        }
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.loggingOut()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -81,7 +73,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         let caption = post["caption"] as! String
         let image = post["media"] as! PFFile
         let author = post["author"] as! PFUser
-        
+
         cell.captionLabel.text = caption
         cell.photoView.file = image
         cell.photoView.loadInBackground()
@@ -92,6 +84,15 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return feedPosts.count
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let cell = sender as! UITableViewCell
+        if let indexPath = tableView.indexPath(for: cell) {
+            let post = feedPosts[indexPath.row]
+            let detailsViewController = segue.destination as! DetailsViewController
+            detailsViewController.post = post
+        }
     }
 
 }
