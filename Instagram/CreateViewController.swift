@@ -18,7 +18,15 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if self.postImage == UIImage(named: "imageName") {
+            launchImagePicker()
+        }
+    }
+    
+    func launchImagePicker(){
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
@@ -28,25 +36,17 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
             imagePicker.sourceType = .camera
         } else {
             print("Camera 🚫 available so we will use photo library instead")
-           imagePicker.sourceType = .photoLibrary
+            imagePicker.sourceType = .photoLibrary
         }
-        
         self.present(imagePicker, animated: true, completion: nil)
-
-        // Do any additional setup after loading the view.
     }
     
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [String : Any]) {
-        // Get the image captured by the UIImagePickerController
         let originalImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         let editedImage = info[UIImagePickerControllerEditedImage] as! UIImage
-        
-        // Do something with the images (based on your use case)
         imageView.image = editedImage
         postImage = editedImage
-        
-        // Dismiss UIImagePickerController to go back to your original view controller
         dismiss(animated: true, completion: nil)
     }
     
@@ -57,12 +57,15 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
             if let error = error {
                 print(error.localizedDescription)
             } else {
-                //self.performSegue(withIdentifier: "loginSegue", sender: nil)
                 print("Post successful")
+                //Goes back to feed after posting
+                self.tabBarController?.selectedIndex = 0
+                //Reset photo selected
+                self.postImage = UIImage(named: "imageName")
+                self.postCaption = ""
             }
         }
     }
-
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

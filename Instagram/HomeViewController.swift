@@ -9,8 +9,10 @@
 import UIKit
 import Parse
 
-class HomeViewController: UIViewController{
+class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
+    
+    @IBOutlet weak var tableView: UITableView!
     var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
@@ -20,6 +22,9 @@ class HomeViewController: UIViewController{
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
         //tableView.insertSubview(refreshControl, at: 0)
+        
+        tableView.dataSource = self
+        tableView.delegate = self
         
         // Do any additional setup after loading the view.
     }
@@ -55,6 +60,15 @@ class HomeViewController: UIViewController{
                 print("Logout successful")
             }
         }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
     }
 
 }
