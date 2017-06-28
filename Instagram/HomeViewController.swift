@@ -32,10 +32,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func refreshControlAction(_ refreshControl: UIRefreshControl) {
         refresh()
+        refreshControl.endRefreshing()
     }
     
     func refresh() {
-        var query = PFQuery(className: "Post")
+        var feedPosts: [PFObject] = []
+        let query = PFQuery(className: "Post")
         query.order(byDescending: "createdAt")
         query.includeKey("author")
         query.limit = 20
@@ -45,10 +47,11 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             } else {
                 if let posts = posts {
                     for post in posts {
-                        self.feedPosts.append(post)
+                        feedPosts.append(post)
                     }
-                self.tableView.reloadData()
-                print("Feed reloaded")
+                    self.feedPosts = feedPosts
+                    self.tableView.reloadData()
+                    print("Feed reloaded")
                 }
             }
         }

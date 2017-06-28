@@ -45,11 +45,21 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
                                didFinishPickingMediaWithInfo info: [String : Any]) {
         let originalImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         let editedImage = info[UIImagePickerControllerEditedImage] as! UIImage
-        imageView.image = editedImage
-        postImage = editedImage
+        imageView.image = resize(image: editedImage, newSize: CGSize(width: 640,height: 640))
+        postImage = resize(image: editedImage, newSize: CGSize(width: 640,height: 640))
         dismiss(animated: true, completion: nil)
     }
     
+    func resize(image: UIImage, newSize: CGSize) -> UIImage {
+        let resizeImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
+        resizeImageView.contentMode = UIViewContentMode.scaleAspectFill
+        resizeImageView.image = image
+        UIGraphicsBeginImageContext(resizeImageView.frame.size)
+        resizeImageView.layer.render(in: UIGraphicsGetCurrentContext()!)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
+    }
     
     @IBAction func onShare(_ sender: Any) {
         postCaption = captionField.text ?? ""
