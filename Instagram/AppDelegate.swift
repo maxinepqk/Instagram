@@ -14,7 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         Parse.initialize(
@@ -29,8 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let currentUser = PFUser.current() {
                 print("Welcome back \(currentUser.username!) 😊")
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let homeNavigationController = storyboard.instantiateViewController(withIdentifier: "HomeViewNavigationController") as! UINavigationController
-                window?.rootViewController = homeNavigationController
+                let homeTabController = storyboard.instantiateViewController(withIdentifier: "HomeViewTabBarController") as! UITabBarController
+                window?.rootViewController = homeTabController
             }
         }
         // Override point for customization after application launch.

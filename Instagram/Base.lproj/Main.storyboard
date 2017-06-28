@@ -75,6 +75,13 @@
                     <view key="view" contentMode="scaleToFill" id="mdl-BM-FkE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Bx4-7Y-Vh5">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="mF5-Kf-xpM">
@@ -92,7 +99,7 @@
         <!--Home-->
         <scene sceneID="bx8-cm-li0">
             <objects>
-                <navigationController storyboardIdentifier="HomeViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="gNn-x7-UHb" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="gNn-x7-UHb" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Home" id="t0e-kh-7L0"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="xVV-2h-rsG">
@@ -111,7 +118,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="Nyw-No-Yxg">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="1s3-05-gu0" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="HomeViewTabBarController" automaticallyAdjustsScrollViewInsets="NO" id="1s3-05-gu0" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="6cW-be-UUV">
                         <autoresizingMask key="autoresizingMask"/>
@@ -137,9 +144,32 @@
                     <view key="view" contentMode="scaleToFill" id="9CU-BY-aqb">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WUq-NC-Azz">
+                                <rect key="frame" x="42" y="101" width="290" height="290"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Write a caption..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mWg-QZ-EUH">
+                                <rect key="frame" x="42" y="419" width="290" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="Q7F-5T-c2s"/>
+                    <navigationItem key="navigationItem" id="Q7F-5T-c2s">
+                        <barButtonItem key="rightBarButtonItem" title="Share" id="yzl-nN-EYp">
+                            <connections>
+                                <action selector="onShare:" destination="NTX-aC-uWg" id="NoS-Wn-HcX"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="captionField" destination="mWg-QZ-EUH" id="EJh-u9-ZFB"/>
+                        <outlet property="imageView" destination="WUq-NC-Azz" id="5p8-a8-YQx"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="C5h-MN-B8g" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
