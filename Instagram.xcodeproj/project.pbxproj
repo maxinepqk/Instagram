@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E038C961F042E5A007F1E5C /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E038C951F042E5A007F1E5C /* PostCell.swift */; };
 		0E8557231F022E720015E834 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8557221F022E720015E834 /* AppDelegate.swift */; };
 		0E8557251F022E720015E834 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8557241F022E720015E834 /* ViewController.swift */; };
 		0E8557281F022E720015E834 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E8557261F022E720015E834 /* Main.storyboard */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0E038C951F042E5A007F1E5C /* PostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 		0E85571F1F022E720015E834 /* Instagram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Instagram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0E8557221F022E720015E834 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0E8557241F022E720015E834 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				0EEE43A91F0304F90081FE4E /* HomeViewController.swift */,
 				0EEE43AB1F03113B0081FE4E /* CreateViewController.swift */,
 				0EEE43AD1F032C780081FE4E /* Post.swift */,
+				0E038C951F042E5A007F1E5C /* PostCell.swift */,
 			);
 			path = Instagram;
 			sourceTree = "<group>";
@@ -458,6 +461,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E038C961F042E5A007F1E5C /* PostCell.swift in Sources */,
 				0EEE43AC1F03113B0081FE4E /* CreateViewController.swift in Sources */,
 				0EE500701F02F7BE00FD3454 /* LoginViewController.swift in Sources */,
 				0E8557251F022E720015E834 /* ViewController.swift in Sources */,

@@ -8,10 +8,11 @@
 
 import UIKit
 import Parse
+import ParseUI
 
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
-    
+    var feedPosts: [PFObject] = []
     @IBOutlet weak var tableView: UITableView!
     var refreshControl: UIRefreshControl!
     
@@ -21,10 +22,10 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         //Refresh Control Initialized
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
-        //tableView.insertSubview(refreshControl, at: 0)
-        
+        tableView.insertSubview(refreshControl, at: 0)
         tableView.dataSource = self
         tableView.delegate = self
+        refresh()
         
         // Do any additional setup after loading the view.
     }
@@ -35,12 +36,20 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func refresh() {
         var query = PFQuery(className: "Post")
-        query.getObjectInBackground(withId: "helloinstagram") { (post: PFObject?, error: Error?) in
+        query.order(byDescending: "createdAt")
+        query.includeKey("author")
+        query.limit = 20
+        query.findObjectsInBackground { (posts: [PFObject]?, error: Error?) in
             if let error = error {
                 print(error.localizedDescription)
             } else {
-                //tableViewReloadDAta
+                if let posts = posts {
+                    for post in posts {
+                        self.feedPosts.append(post)
+                    }
+                self.tableView.reloadData()
                 print("Feed reloaded")
+                }
             }
         }
     }
@@ -58,17 +67,28 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.dismiss(animated: true, completion: nil)
                 self.dismiss(animated: true, completion: nil)
                 print("Logout successful")
+                //Logout doesn't return you to login screen
             }
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostCell
+        let post = feedPosts[indexPath.row]
+        let caption = post["caption"] as! String
+        let image = post["media"] as! PFFile
+        let author = post["author"] as! PFUser
+        
+        cell.captionLabel.text = caption
+        cell.photoView.file = image
+        cell.photoView.loadInBackground()
+        cell.userLabel.text = author.username
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return feedPosts.count
     }
 
 }
