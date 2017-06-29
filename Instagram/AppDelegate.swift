@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print(error.localizedDescription)
             } else {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let loginViewController = storyboard.instantiateViewController(withIdentifier: "loginViewController") as! UIViewController
+                let loginViewController = storyboard.instantiateViewController(withIdentifier: "loginViewController")
                 self.window?.rootViewController = loginViewController
                 print("Logout successful")
             }

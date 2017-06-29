@@ -14,6 +14,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     
     @IBOutlet weak var userView: PFImageView!
     var postImage = UIImage(named: "imageName")
+    var alertController = UIAlertController(title: "createActionController", message: "Change Profile Picture", preferredStyle: .actionSheet)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,33 +25,50 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         userView.layer.borderColor = UIColor.black.cgColor
         userView.layer.cornerRadius = userView.frame.height/2
         userView.clipsToBounds = true
-
+        
+        //Creates action sheet for creating post options
+        let takePhotoAction = UIAlertAction(title: "Take Photo", style: .default) { (action) in
+            self.launchImagePicker(source: .camera)
+        }
+        alertController.addAction(takePhotoAction)
+        let importAction = UIAlertAction(title: "Choose from Library", style: .default) { (action) in
+            self.launchImagePicker(source: .photoLibrary)
+        }
+        alertController.addAction(importAction)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            self.tabBarController?.selectedIndex = 0
+        }
+        alertController.addAction(cancelAction)
+        
         // Do any additional setup after loading the view.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
-    func launchImagePicker(){
+    
+    func launchImagePicker(source: UIImagePickerControllerSourceType){
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
         
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            print("Camera is available 📸")
-            imagePicker.sourceType = .camera
-        } else {
-            print("Camera 🚫 available so we will use photo library instead")
+        if source == .camera {
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                print("Camera is available 📸")
+                imagePicker.sourceType = .camera
+            } else {
+                // add alert here to say camera not available
+                print("Camera 🚫 available so we will use photo library instead")
+                imagePicker.sourceType = .photoLibrary
+            }
+        }
+        else {
             imagePicker.sourceType = .photoLibrary
         }
         self.present(imagePicker, animated: true, completion: nil)
     }
     
+    
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [String : Any]) {
-        let originalImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        _ = info[UIImagePickerControllerOriginalImage] as! UIImage
         let editedImage = info[UIImagePickerControllerEditedImage] as! UIImage
         userView.image = resize(image: editedImage, newSize: CGSize(width: 128,height: 128))
         postImage = resize(image: editedImage, newSize: CGSize(width: 128,height: 128))
@@ -69,23 +87,64 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     @IBAction func onChangePic(_ sender: Any) {
-        Post.postUserImage(image: postImage, withCaption: "") { (status: Bool, error: Error?) in
-            if let error = error {
-                print(error.localizedDescription)
-            } else {
-                print("Post successful")
+        present(alertController, animated: true)
+    }
+    
+    @IBAction func onCancel(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func onDone(_ sender: Any) {
+        if  let user = PFUser.current() {
+            
+            // Upload new profile picture
+            if let image = Post.getPFFileFromImage(image: postImage) {
+                //user.setObject(image, forKey: "image")
+                user["image"] = image
+                user.saveInBackground(block: { (success, error) in
+                    if let error = error {
+                        print(error.localizedDescription)
+                    } else if success {
+                        print("Profile picture uploaded")
+                        self.dismiss(animated: true, completion: nil)
+                    }
+                })
             }
         }
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    
+    func getPFFileFromImage(image: UIImage?) -> PFFile? {
+        // check if image is not nil
+        if let image = image {
+            // get image data and check if that is not nil
+            if let imageData = UIImagePNGRepresentation(image) {
+                return PFFile(name: "image.png", data: imageData)
+            }
+        }
+        return nil
     }
-    */
-
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
 }
+
+
+
+
+
+/*
+ // MARK: - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+ // Get the new view controller using segue.destinationViewController.
+ // Pass the selected object to the new view controller.
+ }
+ */
+
+

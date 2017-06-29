@@ -16,7 +16,9 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var refreshControl: UIRefreshControl!
     var feedPosts: [PFObject] = []
     @IBOutlet weak var userLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var bioLabel: UILabel!
+    @IBOutlet weak var userView: PFImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +30,20 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
         collectionView.dataSource = self
         collectionView.delegate = self
         refresh()
+        
+        //Set user profile displays
         userLabel.text = PFUser.current()?.username
+        self.title = userLabel.text // sets navBar title
+        // Sets circle profile picture viewer
+        userView.layer.borderWidth = 1
+        userView.layer.masksToBounds = false
+        userView.layer.borderColor = UIColor.black.cgColor
+        userView.layer.cornerRadius = userView.frame.height/2
+        userView.clipsToBounds = true
+//        check if user image file exists, if so then 
+//        userView.file = user["image"]
+        
+
 
         // Do any additional setup after loading the view.
     }
@@ -83,13 +98,16 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let cell = sender as! UICollectionViewCell
-        if let indexPath = collectionView.indexPath(for: cell) {
-            let post = feedPosts[indexPath.item]
-            let detailsViewController = segue.destination as! DetailsViewController
-            detailsViewController.post = post
-        // fix segue to edit profile
+        // check ifsegueidentifier
+        if segue.identifier == "detailSegue" {
+            let cell = sender as! UICollectionViewCell
+            if let indexPath = collectionView.indexPath(for: cell) {
+                let post = feedPosts[indexPath.item]
+                let detailsViewController = segue.destination as! DetailsViewController
+                detailsViewController.post = post
+            }
         }
+        // fix segue to edit profile
     }
 
 }

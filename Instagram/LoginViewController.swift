@@ -13,9 +13,15 @@ class LoginViewController: UIViewController {
 
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
+    var alertController = UIAlertController(title: "Incorrect password", message: "The password you entered is incorrect. Please try again.", preferredStyle: .alert)
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Create alert controller
+        let tryAgainAction = UIAlertAction(title: "Try Again", style: .cancel) { (action) in
+        }
+        alertController.addAction(tryAgainAction)
 
         // Do any additional setup after loading the view.
     }
@@ -29,6 +35,10 @@ class LoginViewController: UIViewController {
         PFUser.logInWithUsername(inBackground: usernameField.text!, password: passwordField.text!) { (user: PFUser?, error: Error?) in
             if let error = error {
                 print(error.localizedDescription)
+                let code = (error as NSError).code
+                if code == 101 {
+                    self.present(self.alertController, animated: true)
+                }
             } else {
                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
                 print("Log in successful")
@@ -40,7 +50,6 @@ class LoginViewController: UIViewController {
         let newUser = PFUser()
         newUser.username = usernameField.text
         newUser.password = passwordField.text
-        newUser.setObject(PFFile.self, forKey: "image")
         newUser.signUpInBackground { (success: Bool, error: Error?) in
             if let error = error {
                 print(error.localizedDescription)

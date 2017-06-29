@@ -15,35 +15,56 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBOutlet weak var captionField: UITextField!
     var postImage = UIImage(named: "imageName")
     var postCaption = ""
+    var alertController = UIAlertController(title: "createActionController", message: "New Post", preferredStyle: .actionSheet)
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Creates action sheet for creating post options
+        let takePhotoAction = UIAlertAction(title: "Take Photo", style: .default) { (action) in
+            self.launchImagePicker(source: .camera)
+        }
+        alertController.addAction(takePhotoAction)
+        let importAction = UIAlertAction(title: "Choose from Library", style: .default) { (action) in
+            self.launchImagePicker(source: .photoLibrary)
+        }
+        alertController.addAction(importAction)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            self.tabBarController?.selectedIndex = 0
+        }
+        alertController.addAction(cancelAction)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         if self.postImage == UIImage(named: "imageName") {
-            launchImagePicker()
+            present(alertController, animated: true)
         }
     }
     
-    func launchImagePicker(){
+    func launchImagePicker(source: UIImagePickerControllerSourceType){
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
         
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            print("Camera is available 📸")
-            imagePicker.sourceType = .camera
-        } else {
-            print("Camera 🚫 available so we will use photo library instead")
-            imagePicker.sourceType = .photoLibrary
+        if source == .camera {
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                print("Camera is available 📸")
+                imagePicker.sourceType = .camera
+            } else {
+                // add alert here to say camera not available
+                print("Camera 🚫 available so we will use photo library instead")
+                imagePicker.sourceType = .photoLibrary
+            }
         }
+        else {
+            imagePicker.sourceType = .photoLibrary
+            }
         self.present(imagePicker, animated: true, completion: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [String : Any]) {
-        let originalImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        _ = info[UIImagePickerControllerOriginalImage] as! UIImage
         let editedImage = info[UIImagePickerControllerEditedImage] as! UIImage
         imageView.image = resize(image: editedImage, newSize: CGSize(width: 640,height: 640))
         postImage = resize(image: editedImage, newSize: CGSize(width: 640,height: 640))
