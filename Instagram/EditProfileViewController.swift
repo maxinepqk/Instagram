@@ -10,15 +10,25 @@ import UIKit
 import Parse
 import ParseUI
 
-class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var userView: PFImageView!
     var postImage = UIImage(named: "imageName")
-    var alertController = UIAlertController(title: "createActionController", message: "Change Profile Picture", preferredStyle: .actionSheet)
+    var alertController = UIAlertController(title: "Change Profile Picture", message: nil, preferredStyle: .actionSheet)
+    @IBOutlet weak var nameField: UITextField!
+    @IBOutlet weak var usernameField: UITextField!
+    @IBOutlet weak var bioField: UITextField!
+    var invalidUsernameAlertController = UIAlertController(title: "Username is already taken", message: "The username you entered is already taken. Please enter a new one and try again.", preferredStyle: .alert)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let tryAgainAction = UIAlertAction(title: "Try Again", style: .cancel) { (action) in
+        }
+        invalidUsernameAlertController.addAction(tryAgainAction)
+        
+        [nameField, usernameField, bioField].map { $0?.delegate = self }
+
         // Sets circle profile picture viewer
         userView.layer.borderWidth = 1
         userView.layer.masksToBounds = false
@@ -39,6 +49,15 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             self.tabBarController?.selectedIndex = 0
         }
         alertController.addAction(cancelAction)
+        
+        // Update profile info with existing info
+        if let user = PFUser.current(){
+            usernameField.text = user.username
+            // needs to check if exists
+            bioField.text = user["bio"] as? String
+            nameField.text = user["name"] as? String
+            userView.file = user["image"] as? PFFile
+        }
         
         // Do any additional setup after loading the view.
     }
@@ -95,56 +114,50 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     @IBAction func onDone(_ sender: Any) {
-        if  let user = PFUser.current() {
+        if let user = PFUser.current() {
             
             // Upload new profile picture
             if let image = Post.getPFFileFromImage(image: postImage) {
-                //user.setObject(image, forKey: "image")
                 user["image"] = image
-                user.saveInBackground(block: { (success, error) in
+                user.saveInBackground(block: { (success: Bool?, error: Error?) in
                     if let error = error {
                         print(error.localizedDescription)
-                    } else if success {
+                    } else {
                         print("Profile picture uploaded")
-                        self.dismiss(animated: true, completion: nil)
+                        // broadcast a message called "asiljfhs" to UserVC (using NSNotificationCenter) to tell UserVC to refreshProfileInfo()
                     }
                 })
             }
+            user["bio"] = bioField.text
+            user["name"] = nameField.text
+            user.username = usernameField.text // print error
+            user.saveInBackground(block: { (success: Bool, error: Error?) in
+                if let error = error {
+                    print(error.localizedDescription)
+                    let code = (error as NSError).code
+                    if code == 202 {
+                        self.present(self.invalidUsernameAlertController, animated: true)
+                    }
+                } else {
+                    print("Profile updated")
+                }
+            })
         }
+        self.dismiss(animated: true, completion: nil)
     }
     
-    
-    func getPFFileFromImage(image: UIImage?) -> PFFile? {
-        // check if image is not nil
-        if let image = image {
-            // get image data and check if that is not nil
-            if let imageData = UIImagePNGRepresentation(image) {
-                return PFFile(name: "image.png", data: imageData)
-            }
-        }
-        return nil
-    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
 }
 
-
-
-
-
-/*
- // MARK: - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
- // Get the new view controller using segue.destinationViewController.
- // Pass the selected object to the new view controller.
- }
- */
 
 

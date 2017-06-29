@@ -15,7 +15,7 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBOutlet weak var captionField: UITextField!
     var postImage = UIImage(named: "imageName")
     var postCaption = ""
-    var alertController = UIAlertController(title: "createActionController", message: "New Post", preferredStyle: .actionSheet)
+    var alertController = UIAlertController(title: "New Post", message: nil, preferredStyle: .actionSheet)
     
     override func viewDidLoad() {
         super.viewDidLoad()

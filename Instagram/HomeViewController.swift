@@ -73,12 +73,14 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         let caption = post["caption"] as! String
         let image = post["media"] as! PFFile
         let author = post["author"] as! PFUser
-
+        
         cell.captionLabel.text = caption
         cell.photoView.file = image
         cell.photoView.loadInBackground()
         cell.userLabel.text = author.username
         cell.userLabel2.text = author.username
+        cell.userView.file = author["image"] as? PFFile
+        cell.userView.loadInBackground()
         
         return cell
     }

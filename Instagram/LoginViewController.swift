@@ -13,15 +13,19 @@ class LoginViewController: UIViewController {
 
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-    var alertController = UIAlertController(title: "Incorrect password", message: "The password you entered is incorrect. Please try again.", preferredStyle: .alert)
+    var wrongPasswordAlertController = UIAlertController(title: "Incorrect password", message: "The password you entered is incorrect. Please try again.", preferredStyle: .alert)
+    var noUsernameAlertController = UIAlertController(title: "No username", message: "Please enter a username and try again.", preferredStyle: .alert)
+    var invalidUsernameAlertController = UIAlertController(title: "Username is already taken", message: "The username you entered is already taken. Please enter a new one and try again.", preferredStyle: .alert)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Create alert controller
+        //Create alert controllers
         let tryAgainAction = UIAlertAction(title: "Try Again", style: .cancel) { (action) in
         }
-        alertController.addAction(tryAgainAction)
+        wrongPasswordAlertController.addAction(tryAgainAction)
+        noUsernameAlertController.addAction(tryAgainAction)
+        invalidUsernameAlertController.addAction(tryAgainAction)
 
         // Do any additional setup after loading the view.
     }
@@ -37,8 +41,9 @@ class LoginViewController: UIViewController {
                 print(error.localizedDescription)
                 let code = (error as NSError).code
                 if code == 101 {
-                    self.present(self.alertController, animated: true)
+                    self.present(self.wrongPasswordAlertController, animated: true)
                 }
+                
             } else {
                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
                 print("Log in successful")
@@ -53,6 +58,13 @@ class LoginViewController: UIViewController {
         newUser.signUpInBackground { (success: Bool, error: Error?) in
             if let error = error {
                 print(error.localizedDescription)
+                let code = (error as NSError).code
+                if code == 200 {
+                    self.present(self.noUsernameAlertController, animated: true)
+                } else if code == 202 {
+                    self.present(self.invalidUsernameAlertController, animated: true)
+                }
+
             } else {
                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
                 print("User registered successfully")

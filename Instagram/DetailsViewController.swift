@@ -33,12 +33,21 @@ class DetailsViewController: UIViewController {
             dateFormatter.timeStyle = .short
             let dateString = dateFormatter.string(from: date!)
             
+            // Sets circle profile picture viewer
+            userView.layer.borderWidth = 1
+            userView.layer.masksToBounds = false
+            userView.layer.borderColor = UIColor.white.cgColor
+            userView.layer.cornerRadius = userView.frame.height/2
+            userView.clipsToBounds = true
+            
             captionLabel.text = caption
             photoView.file = image
             photoView.loadInBackground()
             userLabel.text = author.username
             userLabel2.text = author.username
             timestampLabel.text = dateString
+            userView.file = author["image"] as? PFFile
+            userView.loadInBackground()
         }
     }
 

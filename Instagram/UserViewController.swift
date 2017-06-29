@@ -29,23 +29,30 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
         collectionView.insertSubview(refreshControl, at: 0)
         collectionView.dataSource = self
         collectionView.delegate = self
-        refresh()
         
-        //Set user profile displays
-        userLabel.text = PFUser.current()?.username
-        self.title = userLabel.text // sets navBar title
         // Sets circle profile picture viewer
         userView.layer.borderWidth = 1
         userView.layer.masksToBounds = false
-        userView.layer.borderColor = UIColor.black.cgColor
+        userView.layer.borderColor = UIColor.white.cgColor
         userView.layer.cornerRadius = userView.frame.height/2
         userView.clipsToBounds = true
-//        check if user image file exists, if so then 
-//        userView.file = user["image"]
         
-
-
+        refresh()
         // Do any additional setup after loading the view.
+        
+        
+        // use NSNC to listen to broadcast messages titled "asiljfhs", when anyone broadcasts a message called "asiljfhs", then call refreshProfileInfo()
+    }
+    
+    func refreshProfileInfo() {
+        if let user = PFUser.current(){
+            userLabel.text = user.username
+            nameLabel.text = user["name"] as? String
+            bioLabel.text = user["bio"] as? String
+            self.title = user.username// sets navBar title
+            userView.file = user["image"] as? PFFile
+            userView.loadInBackground()
+        }
     }
     
     func refreshControlAction(_ refreshControl: UIRefreshControl) {
@@ -53,10 +60,12 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
         refreshControl.endRefreshing()
     }
     
+    
     func refresh() {
         var feedPosts: [PFObject] = []
         let query = PFQuery(className: "Post")
         query.order(byDescending: "createdAt")
+        query.whereKey("author", equalTo: PFUser.current())
         query.includeKey("author")
         // limit to current author
         query.findObjectsInBackground { (posts: [PFObject]?, error: Error?) in
@@ -65,9 +74,6 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
             } else {
                 if let posts = posts {
                     for post in posts {
-//                      let author = post["author"] as! PFUser
-//                      if author == PFUser.current() {
-//                            print("hello it's me")
                         feedPosts.append(post)
                     }
                     self.feedPosts = feedPosts
@@ -76,6 +82,7 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 }
             }
         }
+        refreshProfileInfo()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
