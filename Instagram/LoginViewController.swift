@@ -40,6 +40,7 @@ class LoginViewController: UIViewController {
         let newUser = PFUser()
         newUser.username = usernameField.text
         newUser.password = passwordField.text
+        newUser.setObject(PFFile.self, forKey: "image")
         newUser.signUpInBackground { (success: Bool, error: Error?) in
             if let error = error {
                 print(error.localizedDescription)

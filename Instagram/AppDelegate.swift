@@ -23,6 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 configuration.server = "https://sleepy-taiga-56600.herokuapp.com/parse"
             })
         )
+        //User.registerSubclass()
         
         if PFUser.current() != nil {
             if let currentUser = PFUser.current() {

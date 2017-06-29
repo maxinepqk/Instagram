@@ -15,7 +15,9 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet weak var collectionView: UICollectionView!
     var refreshControl: UIRefreshControl!
     var feedPosts: [PFObject] = []
-
+    @IBOutlet weak var userLabel: UILabel!
+    @IBOutlet weak var bioLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,6 +28,7 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
         collectionView.dataSource = self
         collectionView.delegate = self
         refresh()
+        userLabel.text = PFUser.current()?.username
 
         // Do any additional setup after loading the view.
     }
@@ -47,6 +50,9 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
             } else {
                 if let posts = posts {
                     for post in posts {
+//                      let author = post["author"] as! PFUser
+//                      if author == PFUser.current() {
+//                            print("hello it's me")
                         feedPosts.append(post)
                     }
                     self.feedPosts = feedPosts
@@ -76,14 +82,14 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        let cell = sender as! UICollectionViewCell
+        if let indexPath = collectionView.indexPath(for: cell) {
+            let post = feedPosts[indexPath.item]
+            let detailsViewController = segue.destination as! DetailsViewController
+            detailsViewController.post = post
+        // fix segue to edit profile
+        }
     }
-    */
 
 }

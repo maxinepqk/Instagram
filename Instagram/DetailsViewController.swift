@@ -13,11 +13,14 @@ import ParseUI
 class DetailsViewController: UIViewController {
     
     var post: PFObject?
+    
     @IBOutlet weak var userLabel: UILabel!
     @IBOutlet weak var timestampLabel: UILabel!
     @IBOutlet weak var captionLabel: UILabel!
     @IBOutlet weak var photoView: PFImageView!
-    
+    @IBOutlet weak var userView: PFImageView!
+    @IBOutlet weak var userLabel2: UILabel!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         if let post = post {
@@ -26,13 +29,15 @@ class DetailsViewController: UIViewController {
             let author = post["author"] as! PFUser
             let date = post.createdAt
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MM/dd/yyyy"
+            dateFormatter.dateStyle = .short
+            dateFormatter.timeStyle = .short
             let dateString = dateFormatter.string(from: date!)
             
             captionLabel.text = caption
             photoView.file = image
             photoView.loadInBackground()
             userLabel.text = author.username
+            userLabel2.text = author.username
             timestampLabel.text = dateString
         }
     }

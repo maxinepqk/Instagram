@@ -78,6 +78,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.photoView.file = image
         cell.photoView.loadInBackground()
         cell.userLabel.text = author.username
+        cell.userLabel2.text = author.username
         
         return cell
     }
