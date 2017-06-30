@@ -10,6 +10,8 @@ import UIKit
 import Parse
 import ParseUI
 
+let updatedProfileNotif = "com.maxine.EditProfileViewController.didUpdateProfile"
+
 class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var userView: PFImageView!
@@ -143,6 +145,9 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
                 }
             })
         }
+        //Fix NS notif
+        let selectionInfo: [NSObject : AnyObject] = [:]
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: updatedProfileNotif), object: self, userInfo: selectionInfo)
         self.dismiss(animated: true, completion: nil)
     }
     

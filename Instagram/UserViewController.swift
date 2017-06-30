@@ -19,6 +19,7 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var bioLabel: UILabel!
     @IBOutlet weak var userView: PFImageView!
+    @IBOutlet weak var postNumberLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,8 +41,11 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
         refresh()
         // Do any additional setup after loading the view.
         
-        
-        // use NSNC to listen to broadcast messages titled "asiljfhs", when anyone broadcasts a message called "asiljfhs", then call refreshProfileInfo()
+        // Listening for profile info updates
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: updatedProfileNotif), object: nil, queue: OperationQueue.main) { (Notification) in
+            self.refreshProfileInfo()
+        }
+
     }
     
     func refreshProfileInfo() {
@@ -65,7 +69,7 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
         var feedPosts: [PFObject] = []
         let query = PFQuery(className: "Post")
         query.order(byDescending: "createdAt")
-        query.whereKey("author", equalTo: PFUser.current())
+        query.whereKey("author", equalTo: PFUser.current()!)
         query.includeKey("author")
         // limit to current author
         query.findObjectsInBackground { (posts: [PFObject]?, error: Error?) in
@@ -78,6 +82,7 @@ class UserViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                     self.feedPosts = feedPosts
                     self.collectionView.reloadData()
+                    self.postNumberLabel.text = String(feedPosts.count)
                     print("Feed reloaded")
                 }
             }
