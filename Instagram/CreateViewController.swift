@@ -8,6 +8,7 @@
 
 import UIKit
 import Parse
+import MBProgressHUD
 
 class CreateViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -37,6 +38,8 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     override func viewDidAppear(_ animated: Bool) {
         if self.postImage == UIImage(named: "imageName") {
+            self.postImage = UIImage(named: "imageName")
+            self.postCaption = ""
             present(alertController, animated: true)
         }
     }
@@ -83,12 +86,14 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     @IBAction func onShare(_ sender: Any) {
+        MBProgressHUD.showAdded(to: self.view, animated: true)
         postCaption = captionField.text ?? ""
         Post.postUserImage(image: postImage, withCaption: postCaption) { (status: Bool, error: Error?) in
             if let error = error {
                 print(error.localizedDescription)
             } else {
                 print("Post successful")
+                MBProgressHUD.hide(for: self.view, animated: true)
                 //Goes back to feed after posting
                 self.tabBarController?.selectedIndex = 0
                 //Reset photo selected
