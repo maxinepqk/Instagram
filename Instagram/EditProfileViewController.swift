@@ -126,7 +126,6 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
                         print(error.localizedDescription)
                     } else {
                         print("Profile picture uploaded")
-                        // broadcast a message called "asiljfhs" to UserVC (using NSNotificationCenter) to tell UserVC to refreshProfileInfo()
                     }
                 })
             }

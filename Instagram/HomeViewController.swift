@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import ParseUI
 
-class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PostCellDelegate {
     
     var feedPosts: [PFObject] = []
     @IBOutlet weak var tableView: UITableView!
@@ -25,6 +25,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.insertSubview(refreshControl, at: 0)
         tableView.dataSource = self
         tableView.delegate = self
+        
+        tableView.separatorStyle = .none
+        
         refresh()
         
         // Do any additional setup after loading the view.
@@ -69,11 +72,28 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostCell
+//        cell.delegate = self as? PostCellDelegate
         let post = feedPosts[indexPath.row]
+//        cell.feedPost = post
+        
+        
+        // in cell
+        
         let caption = post["caption"] as! String
         let image = post["media"] as! PFFile
         let author = post["author"] as! PFUser
+        let likeCount = post["likesCount"] as! Int
+        //cell.likeButton.tag = indexPath.row
         
+//      let likes = post["likesCount"] as? Any
+//      if type(of: likes) == type(of: Int()) {
+//          let likeCount = "0"
+//      }
+//      else {
+//          let likeCount = (likes as? Array)?.count
+//      }
+        
+        cell.likesLabel.text = String(likeCount)
         cell.captionLabel.text = caption
         cell.photoView.file = image
         cell.photoView.loadInBackground()
@@ -82,7 +102,22 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.userView.file = author["image"] as? PFFile
         cell.userView.loadInBackground()
         
+        // Liking
+//      on like, add current user to list of users who liked the post and change the displayed icon by pulling from API
+//     post["likesCount"].append(PFUser.Current())
+//     
+        
         return cell
+    }
+    
+    func postCell(_ cell: PostCell, didLike post: PFObject?) {
+        print("hi")
+        let indexPath = tableView.indexPath(for: cell)!
+        let post = feedPosts[indexPath.row]
+        let likes = (post["likesCount"] as? Int)! + 1
+        post["likesCount"] = likes
+        post.saveInBackground()
+        cell.likeButton.isSelected = true
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

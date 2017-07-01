@@ -10,6 +10,10 @@ import UIKit
 import Parse
 import ParseUI
 
+@objc protocol PostCellDelegate {
+    func postCell(_ cell: PostCell, didLike post: PFObject?)
+}
+
 class PostCell: UITableViewCell {
     
     @IBOutlet weak var userLabel: UILabel!
@@ -17,6 +21,45 @@ class PostCell: UITableViewCell {
     @IBOutlet weak var photoView: PFImageView!
     @IBOutlet weak var userView: PFImageView!
     @IBOutlet weak var userLabel2: UILabel!
+    @IBOutlet weak var likesLabel: UILabel!
+    @IBOutlet weak var likeButton: UIButton!
+    
+//    var liked = false
+      weak var delegate: PostCellDelegate?
+    
+    var feedPost: PFObject?
+    //{
+//        didSet {
+//            let post = feedPost!
+//            let likes = post["likesCount"] as! Int
+//            likesLabel.text = "\(likes)"
+//        }
+  // }
+    
+    
+    @IBAction func didTapLikeButton(_ sender: Any) {
+        delegate?.postCell(self, didLike: feedPost)
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+    }
+    
+//        let post = feedPost!
+//        var likes = post["likesCount"] as! Int
+//        
+//        if liked == false {
+//            likes += 1
+//            likeButton.setImage(UIImage(named: "liked"), for: .normal)
+//        } else {
+//            likes -= 1
+//            likeButton.setImage(UIImage(named: "like"), for: .normal)
+//        }
+//        liked = !liked
+//        post["likesCount"] = likes
+//        post.saveInBackground()
+//        likesLabel.text = "\(likes)"
+
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,10 +73,5 @@ class PostCell: UITableViewCell {
         userView.clipsToBounds = true
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
 
 }

@@ -19,7 +19,7 @@ class LoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         //Create alert controllers
         let tryAgainAction = UIAlertAction(title: "Try Again", style: .cancel) { (action) in
         }
@@ -27,7 +27,18 @@ class LoginViewController: UIViewController {
         noUsernameAlertController.addAction(tryAgainAction)
         invalidUsernameAlertController.addAction(tryAgainAction)
 
-        // Do any additional setup after loading the view.
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        
+        //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
+        //tap.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tap)
+    }
+    
+    //Calls this function when the tap is recognized.
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
 
     override func didReceiveMemoryWarning() {
